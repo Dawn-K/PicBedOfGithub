@@ -1,0 +1,2 @@
+the path of your local git 
+https://github.com/yourname/yourReponame/raw/master/
