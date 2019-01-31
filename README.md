@@ -16,3 +16,6 @@ A simple tool to make Github to a picturebed
 
 - 文件路径中**不要有空格和括号**
 - 本脚本目前只支持Linux系统，后续更新支持Windows系统
+
+## 2019/1/31 更新
+- 新增年月文件层次,且将日志文件移动至对应月文件夹下,更方便查询浏览
