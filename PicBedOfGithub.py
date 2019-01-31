@@ -16,20 +16,37 @@ def file_extension(path):
 
 
 def makeLocal(GitPath, path, fileExten):
+    nowYear = datetime.datetime.now().strftime('%Y')
+    nowMonth = datetime.datetime.now().strftime('%m')
+    nowDay = datetime.datetime.now().strftime('%d')
     nowTime = datetime.datetime.now().strftime('%Y-%m-%d')
     nowTimeTomin = datetime.datetime.now().strftime('%H:%M:%S')
     print('现在时间' + nowTime + ' ' + nowTimeTomin)
-    newPath = GitPath + '/' + nowTime
+    newPath = GitPath + '/' + nowYear
     if os.path.isdir(newPath):
-        print('今日文件夹已存在，直接保存')
+        print("'年'文件夹已存在")
     else:
-        print('今日文件夹尚未存在，正在创建...')
-        os.system('mkdir ' + GitPath + '/' + nowTime)
+        print("正在创建'年'文件夹")
+        os.system('mkdir ' + newPath)
+        print('创建成功')
+    newPath = newPath + '/' + nowMonth
+    if os.path.isdir(newPath):
+        print("'月'文件夹已存在")
+    else:
+        print("正在创建'月'文件夹")
+        os.system('mkdir ' + newPath)
+        print('创建成功')
+    newPath = newPath + '/' + nowDay
+    if os.path.isdir(newPath):
+        print('"日"文件夹已存在，直接保存')
+    else:
+        print('正在创建"日"文件夹')
+        os.system('mkdir ' + newPath)
         print('创建成功')
     print('正在复制文件')
     os.system('cp ' + path + ' ' + newPath + '/' + nowTimeTomin + fileExten)
     print('复制成功')
-    return nowTimeTomin + fileExten, nowTime, nowTimeTomin
+    return nowTimeTomin + fileExten, nowYear + '/' + nowMonth + '/' + nowDay + '/', nowTimeTomin, nowYear + '/' + nowMonth
 
 
 def makeUpload(GitPath, nowTimeTomin):
@@ -40,8 +57,8 @@ def makeUpload(GitPath, nowTimeTomin):
     os.system('git pull && git push')
 
 
-def writeLog(FinalPath, filename):
-    f1 = open(GitPath + '/log.md', 'a')
+def writeLog(FinalPath, LogPath, filename):
+    f1 = open(LogPath + '/log.md', 'a')
     f1.write("![" + filename + "](" + FinalPath + ")\n")
     f1.close()
 
@@ -60,8 +77,8 @@ def main():
     print('已检测到文件，正在上传')
     fileExten = file_extension(path)
     filename = makeLocal(GitPath, path, fileExten)
-    FinalPath = OnlinePath + filename[1] + '/' + filename[2] + fileExten
-    writeLog(FinalPath, filename[1] + '/' + filename[2] + fileExten)
+    FinalPath = OnlinePath + filename[1] + filename[2] + fileExten
+    writeLog(FinalPath, GitPath + '/' + filename[3], filename[1] + filename[2] + fileExten)
     makeUpload(GitPath, filename[0])
     print('<============最终地址============>')
     print(FinalPath)
@@ -75,3 +92,4 @@ if __name__ == "__main__":
     OnlinePath = f.readline()
     f.close()
     main()
+
